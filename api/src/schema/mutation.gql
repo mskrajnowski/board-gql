@@ -22,4 +22,8 @@ type Mutation {
 
   createState(boardId: ID!, state: CreateStateInput!): State
   removeState(id: ID!): Board
+
+  createTask(input: CreateTaskInput): Task
+  removeTask(id: ID!): Board
+  setTaskState(taskId: ID!, stateId: ID!): Task
 }

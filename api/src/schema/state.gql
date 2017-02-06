@@ -5,4 +5,7 @@ type State {
   index: Int!
 
   board: Board!
+
+  tasks: [Task]
+  task(id: ID!): Task
 }

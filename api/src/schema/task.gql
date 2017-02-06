@@ -1,0 +1,17 @@
+type Task {
+  id: ID!
+  title: String!
+  description: String!
+
+  board: Board!
+  state: State!
+  creator: User!
+}
+
+input CreateTaskInput {
+  title: String!
+  description: String
+
+  boardId: ID!
+  stateId: ID
+}

@@ -8,4 +8,7 @@ type Board {
 
   states: [State]
   state(id: ID!): State
+
+  tasks: [Task]
+  task(id: ID!): Task
 }
