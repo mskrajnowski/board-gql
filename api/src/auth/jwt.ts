@@ -1,6 +1,8 @@
 import {Strategy, ExtractJwt, StrategyOptions} from 'passport-jwt';
 import {sign, SignOptions} from 'jsonwebtoken';
 
+import {User, UserModel} from '../models/user';
+
 const secret = process.env.JWT_SECRET || 'secret';
 
 const signOptions: SignOptions = {
@@ -19,7 +21,8 @@ export function generate(user: {id: number}) {
 }
 
 async function verify(payload) {
-  return false;
+  const user = await UserModel.findById(payload.userId);
+  return user || false;
 }
 
 export const strategy = new Strategy(strategyOptions, (payload, done) => {

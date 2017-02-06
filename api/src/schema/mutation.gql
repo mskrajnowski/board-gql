@@ -1,2 +1,9 @@
+input InviteUserInput {
+  email: String!
+  firstName: String
+  lastName: String
+}
+
 type Mutation {
+  inviteUser(input: InviteUserInput): User
 }

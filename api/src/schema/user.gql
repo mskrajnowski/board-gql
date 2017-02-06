@@ -1,0 +1,9 @@
+type User {
+  id: ID!
+  email: String!
+  hasPassword: Boolean!
+
+  firstName: String!
+  lastName: String!
+  fullName: String!
+}
