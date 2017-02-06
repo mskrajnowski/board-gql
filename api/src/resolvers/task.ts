@@ -7,8 +7,10 @@ export default {
   Task: {
     board: (task: Task) => task.getBoard(),
     state: (task: Task) => task.getState(),
-    creator: (task: Task, args, context: IContext) =>
-      context.loaders.usersById.load(task.creatorId),
+    creator: async (task: Task, args, context: IContext) => primeUser(
+      await context.loaders.usersById.load(task.creatorId),
+      context: IContext,
+    ),
   },
 
   State: {

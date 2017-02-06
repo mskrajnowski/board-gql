@@ -18,8 +18,10 @@ export default {
       await UserModel.findAll(),
       context,
     ),
-    user: (obj, {id}, context: IContext) =>
-      context.loaders.usersById.load(id),
+    user: async (obj, {id}, context: IContext) => primeOne(
+      await context.loaders.usersById.load(id),
+      context,
+    )
   },
 
   Mutation: {
