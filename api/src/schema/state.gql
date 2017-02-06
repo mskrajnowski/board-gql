@@ -1,0 +1,8 @@
+type State {
+  id: ID!
+  title: String!
+  description: String!
+  index: Int!
+
+  board: Board!
+}

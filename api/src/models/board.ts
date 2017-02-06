@@ -2,10 +2,11 @@ import * as sql from 'sequelize';
 
 import db from './db';
 import {User, UserModel, UserCreateAttributes} from './user';
+import {State, StateCreateAttributes} from './state';
 
 
 export interface BoardCreateAttributes {
-  creator: User;
+  creatorId: number;
   title: string;
   description?: string;
 }
@@ -22,14 +23,14 @@ export interface Board extends
   title: string;
   description: string;
 
-  creatorId: number;
-
   isVisibleTo(user: User): boolean;
 
+  // creator
   getCreator: sql.BelongsToGetAssociationMixin<User>;
   setCreator: sql.BelongsToSetAssociationMixin<User, number>;
   createCreator: sql.BelongsToCreateAssociationMixin<User>;
 
+  // members
   getMembers: sql.BelongsToManyGetAssociationsMixin<User>;
   setMembers: sql.BelongsToManySetAssociationsMixin<User, number, BoardMemberCreateAttributes>;
   addMembers: sql.BelongsToManyAddAssociationsMixin<User, number, BoardMemberCreateAttributes>;
@@ -39,8 +40,18 @@ export interface Board extends
   createMember: sql.BelongsToManyCreateAssociationMixin<UserCreateAttributes, BoardMemberCreateAttributes>;
   removeMember: sql.BelongsToManyRemoveAssociationMixin<User, number>;
   hasMember: sql.BelongsToManyHasAssociationMixin<User, number>;
-}
 
+  // states
+  getStates: sql.HasManyGetAssociationsMixin<State>;
+  setStates: sql.HasManySetAssociationsMixin<State, number>;
+  addStates: sql.HasManyAddAssociationsMixin<State, number>;
+  hasStates: sql.HasManyHasAssociationsMixin<State, number>;
+
+  addState: sql.HasManyAddAssociationMixin<State, number>;
+  createState: sql.HasManyCreateAssociationMixin<StateCreateAttributes>;
+  removeState: sql.HasManyRemoveAssociationMixin<State, number>;
+  hasState: sql.HasManyHasAssociationMixin<State, number>;
+}
 
 export const BoardModel = db.define<Board, BoardCreateAttributes>('Board', {
   id: {

@@ -5,4 +5,7 @@ type Board {
 
   creator: User
   members: [User]
+
+  states: [State]
+  state(id: ID!): State
 }

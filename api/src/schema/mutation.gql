@@ -9,9 +9,17 @@ input CreateBoardInput {
   description: String
 }
 
+input CreateStateInput {
+  title: String!
+  description: String
+}
+
 type Mutation {
   inviteUser(input: InviteUserInput): User
 
   createBoard(input: CreateBoardInput): Board
   inviteBoardMember(boardId: ID!, invite: InviteUserInput): Board
+
+  createState(boardId: ID!, state: CreateStateInput!): State
+  removeState(id: ID!): Board
 }
