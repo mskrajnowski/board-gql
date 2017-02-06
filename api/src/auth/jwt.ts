@@ -13,6 +13,7 @@ const strategyOptions: StrategyOptions = {
   secretOrKey: secret,
   jwtFromRequest: ExtractJwt.fromAuthHeader(),
   algorithms: [signOptions.algorithm],
+  passReqToCallback: true,
 };
 
 export function generate(user: {id: number}) {
@@ -20,13 +21,14 @@ export function generate(user: {id: number}) {
   return sign(payload, secret, signOptions);
 }
 
-async function verify(payload) {
-  const user = await UserModel.findById(payload.userId);
-  return user || false;
+async function verify(req, payload, done) {
+  const user = await req.loaders.usersById.load(payload.userId);
+
+  if (user) {
+    done(null, user);
+  } else {
+    done(null, false);
+  }
 }
 
-export const strategy = new Strategy(strategyOptions, (payload, done) => {
-  verify(payload)
-  .then((user) => done(null, user))
-  .catch((err) => done(err));
-});
+export const strategy = new Strategy(strategyOptions, verify);

@@ -1,10 +1,19 @@
 import {UserModel} from '../models/user'
 import {Board, BoardModel} from '../models/board'
+import {IContext} from './context'
+import {
+  primeOne as primeUser,
+  primeAll as primeUsers
+} from './user'
 
 export default {
   Board: {
-    creator: (board: Board) => board.getCreator(),
-    members: (board: Board) => board.getMembers(),
+    creator: (board: Board, args, context: IContext) =>
+      context.loaders.usersById.load(board.creatorId),
+    members: async (board: Board, args, context: IContext) => primeUsers(
+      await board.getMembers(),
+      context,
+    )
   },
 
   Query: {
@@ -13,7 +22,7 @@ export default {
   },
 
   Mutation: {
-    createBoard: async (obj, {input}, context) => {
+    createBoard: async (obj, {input}, context: IContext) => {
       const board = await BoardModel.create({
         creatorId: context.user.id,
         ...input,
@@ -22,7 +31,7 @@ export default {
       return board;
     },
 
-    inviteBoardMember: async (obj, {boardId, invite}) => {
+    inviteBoardMember: async (obj, {boardId, invite}, context: IContext) => {
       const board = await BoardModel.findById(boardId);
 
       if (!board) {
@@ -33,6 +42,8 @@ export default {
         where: {email: invite.email},
         defaults: invite,
       });
+
+      primeUser(user, context);
 
       await board.addMember(user);
 

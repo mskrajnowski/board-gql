@@ -1,12 +1,14 @@
 import {Board} from '../models/board'
 import {State, StateModel} from '../models/state'
 import {Task, TaskModel} from '../models/task'
+import {IContext} from './context'
 
 export default {
   Task: {
     board: (task: Task) => task.getBoard(),
     state: (task: Task) => task.getState(),
-    creator: (task: Task) => task.getCreator(),
+    creator: (task: Task, args, context: IContext) =>
+      context.loaders.usersById.load(task.creatorId),
   },
 
   State: {

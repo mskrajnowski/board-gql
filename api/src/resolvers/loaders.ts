@@ -1,8 +1,11 @@
-import DataLoader from 'dataloader'
+import * as DataLoader from 'dataloader'
 
-export type ILoader<T> = DataLoader<number, T>;
-export type ILoaderFactories = {[key: string]: () => ILoader<any>};
-export type ILoaders = {[key: string]: ILoader<any>};
+export type ID = number | string;
+export type ILoaderFactories = {[key: string]: () => DataLoader<ID, any>};
+
+export interface ILoaders {
+  [key: string]: DataLoader<ID, any>;
+}
 
 export interface IWithLoaders {
   loaders?: ILoaders,
@@ -28,11 +31,11 @@ export function createLoadersMiddleware(loaderFactories: ILoaderFactories) {
 }
 
 export function collect<T>(
-  ids: number[],
+  ids: Array<ID>,
   items: T[],
-  getId: (obj: T) => number,
+  getId: (obj: T) => ID,
 ) {
-  const indices = ids.reduce<{[id: number]: number}>(
+  const indices = ids.reduce<{[id: string]: number}>(
     (indices, id, index) => {
       indices[id] = index;
       return indices;
