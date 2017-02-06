@@ -6,6 +6,8 @@ import board from './board'
 import state from './state'
 import task from './task'
 
+import {createLoadersMiddleware, ILoaderFactories} from './loaders'
+
 export const resolvers = _.merge(
   auth,
   board,
@@ -13,3 +15,9 @@ export const resolvers = _.merge(
   task,
   user,
 );
+
+export const loaderFactories: ILoaderFactories = {
+
+};
+
+export const loadersMiddleware = createLoadersMiddleware(loaderFactories);

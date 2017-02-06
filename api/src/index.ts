@@ -5,7 +5,8 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { makeExecutableSchema } from 'graphql-tools'
 
 import models from './models';
-import {resolvers} from './resolvers'
+import {resolvers, loadersMiddleware} from './resolvers'
+import {IRequest} from './resolvers/loaders'
 import {generate, strategy as jwtStrategy} from './auth/jwt';
 import {strategy as basicStrategy} from './auth/basic';
 import {readSchema} from './schema'
@@ -28,17 +29,22 @@ async function main() {
 
   app.get(
     '/auth',
+    loadersMiddleware,
     passport.authenticate('basic', {session: false}),
     (req, res) => res.end(generate(req.user))
   )
 
   app.use(
     '/graphql',
+    loadersMiddleware,
     passport.authenticate('jwt', {session: false}),
     bodyParser.json(),
-    graphqlExpress((req) => ({
+    graphqlExpress((req: IRequest) => ({
       schema: schema,
-      context: {user: req.user},
+      context: {
+        user: req.user,
+        loaders: req.loaders,
+      },
     })),
   );
 
