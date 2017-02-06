@@ -4,6 +4,9 @@ import {User, UserModel} from '../models/user'
 export default {
   User: {
     hasPassword: (user: User) => !!user.passwordHash,
+
+    boards: (user: User) => user.getBoards(),
+    createdBoards: (user: User) => user.getCreatedBoards(),
   },
 
   Query: {

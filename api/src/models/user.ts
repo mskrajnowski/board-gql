@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import * as sql from 'sequelize';
 
 import db from './db';
+import {Board, BoardCreateAttributes, BoardMemberCreateAttributes} from './board';
 
 
 export function hashPassword(password) {
@@ -36,6 +37,26 @@ export interface User extends
   fullName: string;
 
   testPassword(password: string): boolean;
+
+  getCreatedBoards: sql.HasManyGetAssociationsMixin<Board>;
+  setCreatedBoards: sql.HasManySetAssociationsMixin<Board, number>;
+  addCreatedBoards: sql.HasManyAddAssociationsMixin<Board, number>;
+  hasCreatedBoards: sql.HasManyHasAssociationsMixin<Board, number>;
+
+  addCreatedBoard: sql.HasManyAddAssociationMixin<Board, number>;
+  createCreatedBoard: sql.HasManyCreateAssociationMixin<BoardCreateAttributes>;
+  removeCreatedBoard: sql.HasManyRemoveAssociationMixin<Board, number>;
+  hasCreatedBoard: sql.HasManyHasAssociationMixin<Board, number>;
+
+  getBoards: sql.BelongsToManyGetAssociationsMixin<Board>;
+  setBoards: sql.BelongsToManySetAssociationsMixin<Board, number, BoardMemberCreateAttributes>;
+  addBoards: sql.BelongsToManyAddAssociationsMixin<Board, number, BoardMemberCreateAttributes>;
+  hasBoards: sql.BelongsToManyHasAssociationsMixin<Board, number>;
+
+  addBoard: sql.BelongsToManyAddAssociationMixin<Board, number, BoardMemberCreateAttributes>;
+  createBoard: sql.BelongsToManyCreateAssociationMixin<BoardCreateAttributes, BoardMemberCreateAttributes>;
+  removeBoard: sql.BelongsToManyRemoveAssociationMixin<Board, number>;
+  hasBoard: sql.BelongsToManyHasAssociationMixin<Board, number>;
 }
 
 

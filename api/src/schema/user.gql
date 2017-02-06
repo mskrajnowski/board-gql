@@ -6,4 +6,7 @@ type User {
   firstName: String!
   lastName: String!
   fullName: String!
+
+  boards: [Board]
+  createdBoards: [Board]
 }
